@@ -1,70 +1,44 @@
 # CSE-da-2
 
 #include <stdio.h>
-#include <math.h>
-int isPrime(int num);
-int isArmstrong(int num);
-int isPerfect(int num);
+#include <string.h>
 int main() {
- int num;
- printf("Enter a positive integer: ");
- scanf("%d", &num);
- if (isPrime(num)) {
- printf("%d is a prime number\n", num);
- } else {
- printf("%d is not a prime number\n", num);
+ char str[100];
+ int len, freq[256] = {0}, i;
+ char *first_rep = NULL, *first_nonrep = NULL;
+ printf("Enter a string: ");
+ fgets(str, 100, stdin);
+ len = strlen(str) - 1;
+ for(i = 0; i < len; i++) {
+ freq[(int)str[i]]++;
  }
- if (isArmstrong(num)) {
- printf("%d is an Armstrong number\n", num);
- } else {
- printf("%d is not an Armstrong number\n", num);
+ printf("Length of the string is: %d\n", len);
+ printf("Word frequency is: ");
+ for(i = 0; i < 256; i++) {
+ if(freq[i] != 0) {
+ printf("%c:%d ", i, freq[i]);
  }
- if (isPerfect(num)) {
- printf("%d is a perfect number\n", num);
+ }
+ printf("\n");
+ for(i = 0; i < len; i++) {
+ if(freq[(int)str[i]] > 1 && first_rep == NULL) {
+ first_rep = &str[i];
+ } else if(freq[(int)str[i]] == 1 && first_nonrep == NULL) {
+ first_nonrep = &str[i];
+ }
+ if(first_rep != NULL && first_nonrep != NULL) {
+ break;
+ }
+ }
+ if(first_rep == NULL) {
+ printf("No repeated characters found in the string.\n");
  } else {
- printf("%d is not a perfect number\n", num);
+ printf("First repeated character is: %c\n", *first_rep);
+ }
+ if(first_nonrep == NULL) {
+ printf("No non-repeated characters found in the string.\n");
+ } else {
+ printf("First non-repeated character is: %c\n", *first_nonrep);
  }
  return 0;
-}
-int isPrime(int num) {
- int i;
- for (i = 2; i <= sqrt(num); i++) {
- if (num % i == 0) {
- return 0;
- }
- }
- return 1;
-}
-int isArmstrong(int num) {
- int sum = 0;
- int temp = num;
- int digitCount = 0;
- while (temp != 0) {
- digitCount++;
- temp /= 10;
- }
- temp = num;
- while (temp != 0) {
- int remainder = temp % 10;
- sum += pow(remainder, digitCount);
- temp /= 10;
- }
- if (sum == num) {
- return 1;
- } else {
- return 0;
- }
-}
-int isPerfect(int num) {
- int i, sum = 0;
- for (i = 1; i <= num / 2; i++) {
- if (num % i == 0) {
- sum += i;
- }
- }
- if (sum == num) {
- return 1;
- } else {
- return 0;
- }
-}
+} 
